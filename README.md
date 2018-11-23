@@ -1,7 +1,9 @@
 # IMG2CHDR
 
-Converts an image file to a bitmap written as a C header. Originally intended
-for use in github.com/ZinggJM/GxEPD.
+Converts an image file to a monochrome bitmap written as a C header. Originally
+intended for use wth github.com/ZinggJM/GxEPD.
+
+Supports dynamic-range scaling, resizing, and dithering.
 
 Usage:
 

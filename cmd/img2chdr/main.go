@@ -11,12 +11,14 @@ import (
 )
 
 var (
-	inFileName = flag.String("in", "", "The input file name")
-	imgName = flag.String("name", "", "The name of the image. Defaults based on --in")
-	maxX = flag.Int("max_x", 296, "The maximum x resolution")
-	maxY = flag.Int("max_y", 128, "The maximum y resolution")
-	outFileName = flag.String("out", "", "The output file name")
-	outImage = flag.Bool("out_image", false, "If given, write the output image for easy viewing")
+	inFileName      = flag.String("in", "", "The input file name")
+	imgName         = flag.String("name", "", "The name of the image. Defaults based on --in")
+	maxX            = flag.Int("max_x", 296, "The maximum x resolution")
+	maxY            = flag.Int("max_y", 128, "The maximum y resolution")
+	outFileName     = flag.String("out", "", "The output file name")
+	outImage        = flag.Bool("out_image", false, "If given, write the output image for easy viewing")
+	rangePercentile = flag.Int("range_percentile", 2, "Scale the image intensity range excluding this percentile of pixels")
+	dither          = flag.Bool("dither", true, "Use dithering on the output image")
 )
 
 func handleFlags() {
@@ -52,9 +54,13 @@ func main() {
 	}
 	defer inReader.Close()
 
-	converter := img2chdr.Converter {
+	converter := img2chdr.Converter{
 		MaxX: *maxX,
 		MaxY: *maxY,
+	}
+	img2chdr.RangePercentile = *rangePercentile
+	if !*dither {
+		img2chdr.Ditherer = 0
 	}
 	grayImage, err := converter.ImageAsGrayscale(inReader)
 	if err != nil {
